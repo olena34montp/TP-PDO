@@ -3,10 +3,17 @@ include 'connexion.php';
 
 $console = $_GET['console'];
 
-if(isset($console) && !empty($console)) {
-    $statementAll = $pdo->query("SELECT * FROM `mes_jeux` WHERE console = '$console' ORDER BY nom ASC");
-    $result = $statementAll->fetchAll(PDO::FETCH_ASSOC);
-
+if(!empty($console)) {
+    $statement = $pdo->prepare(
+        "SELECT mes_jeux.id, nom, console 
+        FROM `mes_jeux` 
+        JOIN `console` 
+        ON mes_jeux.console_id = console.id  
+        WHERE console = :c 
+        ORDER BY nom");
+    $statement->bindParam(':c', $console, PDO::PARAM_STR);
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
     foreach($result as $key => $values){
         echo 'Jeu numéro : '. $values['id'];
         echo '<br>';
@@ -17,9 +24,13 @@ if(isset($console) && !empty($console)) {
         echo '<br>';
     }
 } else {
-    $statementAll = $pdo->query("SELECT * FROM `mes_jeux` ORDER BY nom ASC");
+    $statementAll = $pdo->query(
+        "SELECT mes_jeux.id, nom, console 
+        FROM `mes_jeux` 
+        JOIN `console` 
+        ON mes_jeux.console_id = console.id 
+        ORDER BY nom");
     $result = $statementAll->fetchAll(PDO::FETCH_ASSOC);
-
     foreach($result as $key => $values){
         echo 'Jeu numéro : '. $values['id'];
         echo '<br>';

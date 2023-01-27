@@ -1,15 +1,11 @@
 <?php
 include "connexion.php";
 
-$statement = $pdo->query("SELECT * FROM mes_jeux");
+$statement = $pdo->query("SELECT * FROM console");
 $statementAll = $pdo->query("SELECT * FROM mes_jeux");
 
-$result = $statement->fetch(PDO::FETCH_ASSOC);
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 $resultAll = $statementAll->fetchAll(PDO::FETCH_ASSOC);
-
-echo "<pre>";
-var_dump($result);
-echo "</pre>";
 
 echo "Ma liste de jeux videos :<br>";
 foreach ($resultAll as $key => $values){
@@ -26,8 +22,12 @@ foreach ($resultAll as $key => $values){
     echo '<a href="delete.php?id='.$values['id'].'">Supprimer ce jeu</a> <br><br><br>';
 }
 
-echo '<br>';
-echo '<a href="byConsole.php?console">Tous les jeux</a> <br>';
-echo '<a href="byConsole.php?console=ps4">Tous les jeux PS4</a><br>';
-echo '<a href="byConsole.php?console=switch">Tous les jeux switch</a><br>';
-echo '<a href="byConsole.php?console=xbox serie">Tous les jeux xbox</a><br>';
+
+echo '<ul>';
+echo '<li><a href="byConsole.php?console">Tous les jeux</a> </li>';
+foreach ($result as $uneConsole) {
+    $nomConsole = $uneConsole['console'];
+    echo '<li><a href="byConsole.php?console='.$nomConsole.'">Tous les jeux '.$nomConsole.'</a> </li>';
+    
+}  
+echo '</ul>';

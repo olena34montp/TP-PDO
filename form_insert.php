@@ -1,4 +1,9 @@
+<?php
+include 'connexion.php';
+$statement = $pdo->query("SELECT * FROM `console`");
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +19,20 @@
         <input id="nom" type="text" name="nom">
         <br>
         <label for="nom-console">Nom de la console</label>
-        <input id="nom-console" type="text" name="console">
+        <select name="console" id="nom-console">
+            <option value="">--Choisissez l'option--</option>
+            <?php
+                foreach ($result as $uneConsole) {
+                    $idConsole = $uneConsole['id'];
+                    $nomConsole = $uneConsole['console'];
+                    ?>
+                        <option value="<?php echo $idConsole ?>">
+                            <?php echo $nomConsole ?>
+                        </option>
+                    <?php
+                }
+            ?>
+        </select>    
         <br>
         <input type="submit" value="ok">
     </form>

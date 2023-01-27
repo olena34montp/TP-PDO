@@ -2,15 +2,16 @@
 include 'connexion.php';
 
 $nom = $_POST['nom'];
-$console = $_POST['console'];
+$console_id = $_POST['console'];
 // Préparation
 
 $statement = $pdo->prepare(
-"INSERT INTO `mes_jeux`(nom, console)
+"INSERT INTO `mes_jeux`(nom, console_id)
 VALUES (:n, :c);");
+
 // Correspondre les valeurs
 $statement->bindParam(':n', $nom, PDO::PARAM_STR);
-$statement->bindParam(':c', $console, PDO::PARAM_STR);
+$statement->bindParam(':c', $console_id, PDO::PARAM_INT);
 $result = $statement->execute();
 $last_id = $pdo->lastInsertId();
 

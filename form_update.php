@@ -1,7 +1,18 @@
 <?php
 include 'connexion.php';
+
 $id = intval($_GET['id']);
-$statement = $pdo->query("SELECT * FROM `mes_jeux` WHERE id = " . $id);
+
+$statement = $pdo->prepare(
+    "SELECT * 
+    FROM `mes_jeux` 
+    JOIN `console` 
+    ON mes_jeux.console_id = console.id 
+    WHERE mes_jeux.id = :id");
+
+$statement->bindParam(':id', $id, PDO::PARAM_INT);
+$statement->execute();
+
 $result = $statement->fetch(PDO::FETCH_ASSOC);
 $nom = $result['nom'];
 $console = $result['console'];
